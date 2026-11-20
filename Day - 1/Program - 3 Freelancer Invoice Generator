@@ -1,0 +1,75 @@
+# Freelancer Invoice Generator
+
+inr_currency_symbol = "INR"
+usd_currency_symbol = "USD"
+percentage = 100
+rule_width = 50
+label_width = 19
+money_width = 14
+
+standard_hours = 40
+large_invoice_threshold = 100000
+
+# Collect Information from User
+client_name = input("Enter your Name: ")
+hours_worked = float(input("Enter the Number of Hours Worked: "))
+hourly_rate = float(input("Enter the Hourly Rate: "))
+discount = float(input("Enter the Discount: "))
+service_tax = float(input("Enter the Service Tax: "))
+exchange_rate = float(input("Enter the Exchange Rate: "))
+
+# Calculating the Gross amount
+gross_amount = hours_worked * hourly_rate
+
+# Calculating the Discount rate
+discount_rate = discount / percentage
+
+# Calculating the Discount Amount
+discount_amount = discount_rate * gross_amount
+
+# Amount after Discount
+amount_after_discount = gross_amount - discount_amount
+
+# Calculating the Service Tax rate
+service_tax_rate = service_tax / percentage
+
+# Calculating the Service Tax Amount
+service_tax_amount = service_tax_rate * amount_after_discount
+
+# Calculating the Total Amount
+total_amount = amount_after_discount + service_tax_amount
+
+# Converting the USD to INR based on todays exchange rate
+total_amount_rounded = round(total_amount, 2)
+total_amount_inr = total_amount_rounded * exchange_rate
+
+# Checking whether long hours worked or not
+is_long_engaged = hours_worked > standard_hours
+
+# Checking whether it is highest total invoice
+is_large_invoice = total_amount_inr > large_invoice_threshold
+
+# Pre-built Labels
+discount_label = f"Discount ({discount_rate:.1%})"
+service_tax_label = f"Service tax ({service_tax_rate:.1%})"
+
+# Printing the Invoice
+print("=" * rule_width)
+title = 'INVOICE - ' + client_name
+print(f"{title:^{rule_width}}")
+print("=" * rule_width)
+
+print(f"{'Gross Amount':<{label_width}}: {gross_amount:>{money_width},.2f} {usd_currency_symbol}")
+print(f"{discount_label:<{label_width}}: {discount_amount:>{money_width},.2f} {usd_currency_symbol}")
+print(f"{'After Discount':<{label_width}}: {amount_after_discount:>{money_width},.2f} {usd_currency_symbol}")
+print(f"{service_tax_label:<{label_width}}: {service_tax_amount:>{money_width},.2f} {usd_currency_symbol}")
+
+print("-" * rule_width)
+
+print(f"{'Total Payable':<{label_width}}: {total_amount:>{money_width},.2f} {usd_currency_symbol}")
+print(f"{'Total in INR':<{label_width}}: {total_amount_inr:>{money_width},.2f} {inr_currency_symbol}")
+print(f"{'Exchange Rate Used':<{label_width}}: {exchange_rate:>{money_width},.4f}")
+print(f"{'Long Engagement':<{label_width}}: {is_long_engaged:>{money_width}}")
+print(f"{'Large Invoice':<{label_width}}: {is_large_invoice:>{money_width}}")
+
+print("=" * rule_width)
